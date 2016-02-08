@@ -7,11 +7,13 @@ using System.Collections;
 public class Config : Singleton<Config> {
     public string filename = "config.ini";
 
-    // Example data to be loaded from file.
-    public int number;
+    private InputController _inputController;
 
     void Awake()
     {
+        //Initialize Singletons
+        _inputController = InputController.Instance;
+
         loadFile(filename);
         // Other stuff 
     }
@@ -42,8 +44,9 @@ public class Config : Singleton<Config> {
                         {
                             switch (data[0].Trim().ToLower())
                             {
-                                case "number":
-                                    number = int.Parse(data[1].Trim());
+                                case "building footprint":
+                                    int val = int.Parse(data[1].Trim());
+                                    //Populate value wherever needed
                                     break;
                                 default:
                                     break;
