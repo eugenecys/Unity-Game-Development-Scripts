@@ -50,7 +50,7 @@ public class EventManager : Singleton<EventManager> {
     void Awake()
     {
         _eventStore = new Dictionary<int, List<TimedEvent>>();
-        startGame();
+        run();
         
     }
 
@@ -58,13 +58,13 @@ public class EventManager : Singleton<EventManager> {
 	void Start () {
 	}
 
-    public void startGame(int i)
+    public void run(int i)
     {
         goToStage(i);
     }
 
     // Triggers the game to start
-    public void startGame()
+    public void run()
     {
         if (!_eventStore.ContainsKey(defaultStage))
         {
@@ -76,8 +76,6 @@ public class EventManager : Singleton<EventManager> {
     public void goToStage(int stage)
     {
         _currentEventSet = retrieveStage(stage);
-        Debug.Log("Proceeding to stage " + stage);
-        Debug.Log("Event List Count: " + _currentEventSet.Count);
         StopAllCoroutines();
         currentStage = stage;
         startTime = Time.time;
