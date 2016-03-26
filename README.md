@@ -224,3 +224,38 @@ Hello
 
 The first 4 lines happen at stage 0, followed by the next 2 at stage 1, and then the last 3 at stage 0 again. 
 
+
+##AVL
+The AVL class is a generic Self-Balancing Binary Search Tree, which I included both for general purpose use if needed, since certain versions of Unity do not yet have in-built priority lists or trees. 
+
+This AVL tree stores all objects in a binary tree, ordered from smallest to largest, so it is useful if there is a need to maintain a list of ordered objects. 
+
+The Event Manager uses the AVL tree, so make sure you have it in your project if you intend to use the Event Manager.
+
+To add objects to the tree, call either: ```C# Add(T arg);``` or ```Push(T arg);```
+
+To add a whole collection, call: ```C# AddAll(ICollection<T> collection);```
+
+To check if an object if stored in the tree, call ```C# Contains(T arg)```
+
+To retrieve the index of a specific object, call ```C# Find(T arg)```
+
+To remove and retrieve the first object, call: ```C# Pop();```
+
+To remove a specific object, call: ```C# Remove(T arg);```
+
+The AVL Tree can also be accessed like an array (read only), by such:
+```C#
+AVL<int> myTree = new AVL<int>();
+myTree.add(1);
+myTree[0];
+```
+
+The size of the tree can be accessed by: 
+```C#
+myTree.Count;
+```
+
+To delete everything from the tree, call ```C# Clear()```
+
+To make a copy of a collection, call ```C# CopyOf(ICollection<T> collection)
