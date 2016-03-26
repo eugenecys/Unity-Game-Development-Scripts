@@ -15,6 +15,11 @@ public class EventManager : Singleton<EventManager> {
     private TimedEvent _nextEvent;
     public int currentStage { get; private set; }
 
+    public void registerEvent(GameEvent gameEvent, float delay)
+    {
+        registerEvent(gameEvent, delay, defaultStage);
+    }
+
     public void registerEvent(GameEvent gameEvent, float delay, int stage)
     {
         TimedEvent evt = new TimedEvent(gameEvent, delay);
@@ -26,8 +31,8 @@ public class EventManager : Singleton<EventManager> {
         }
         _eventSet.Add(evt);
     }
-    
-    public bool addEvent(GameEvent gameEvent, float delay, bool relative)
+
+    public bool addEvent(GameEvent gameEvent, float delay, bool relative = true)
     {
         if (_currentEventSet == null)
         {
