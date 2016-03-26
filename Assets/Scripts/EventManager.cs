@@ -23,8 +23,12 @@ public class EventManager : Singleton<EventManager> {
     public void registerEvent(GameEvent gameEvent, float delay, int stage)
     {
         TimedEvent evt = new TimedEvent(gameEvent, delay);
-        List<TimedEvent> _eventSet = _eventStore[stage];
-        if (_eventSet == null)
+        List<TimedEvent> _eventSet;
+        if (_eventStore.ContainsKey(stage))
+        {
+            _eventSet = _eventStore[stage];
+        }
+        else
         {
             _eventSet = new List<TimedEvent>();
             _eventStore.Add(stage, _eventSet);
@@ -55,12 +59,12 @@ public class EventManager : Singleton<EventManager> {
     void Awake()
     {
         _eventStore = new Dictionary<int, List<TimedEvent>>();
-        run();
-        
     }
 
 	// Use this for initialization
-	void Start () {
+    void Start()
+    {
+
 	}
 
     public void run(int i)
@@ -85,6 +89,11 @@ public class EventManager : Singleton<EventManager> {
         currentStage = stage;
         startTime = Time.time;
         _nextEvent = null;
+    }
+
+    public void restartStage()
+    {
+        goToStage(currentStage);
     }
 
     public void advanceStage()
@@ -120,7 +129,6 @@ public class EventManager : Singleton<EventManager> {
         if (!_eventStore.ContainsKey(i))
         {
             _eventStore.Add(i, new List<TimedEvent>());
-            
         }
         eventList = _eventStore[i];
         AVL<TimedEvent> eventSet = new AVL<TimedEvent>();
