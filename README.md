@@ -232,17 +232,17 @@ This AVL tree stores all objects in a binary tree, ordered from smallest to larg
 
 The Event Manager uses the AVL tree, so make sure you have it in your project if you intend to use the Event Manager.
 
-To add objects to the tree, call either: ```C# Add(T arg);``` or ```Push(T arg);```
+To add objects to the tree, call either: ```Add(T arg);``` or ```Push(T arg);```
 
-To add a whole collection, call: ```C# AddAll(ICollection<T> collection);```
+To add a whole collection, call: ```AddAll(ICollection<T> collection);```
 
-To check if an object if stored in the tree, call ```C# Contains(T arg)```
+To check if an object if stored in the tree, call ```Contains(T arg)```
 
-To retrieve the index of a specific object, call ```C# Find(T arg)```
+To retrieve the index of a specific object, call ```Find(T arg)```
 
-To remove and retrieve the first object, call: ```C# Pop();```
+To remove and retrieve the first object, call: ```Pop();```
 
-To remove a specific object, call: ```C# Remove(T arg);```
+To remove a specific object, call: ```Remove(T arg);```
 
 The AVL Tree can also be accessed like an array (read only), by such:
 ```C#
@@ -256,6 +256,6 @@ The size of the tree can be accessed by:
 myTree.Count;
 ```
 
-To delete everything from the tree, call ```C# Clear()```
+To delete everything from the tree, call ```Clear()```
 
-To make a copy of a collection, call ```C# CopyOf(ICollection<T> collection)
+To make a copy of a collection, call ```CopyOf(ICollection<T> collection)
