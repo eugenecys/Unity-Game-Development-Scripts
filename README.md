@@ -66,17 +66,161 @@ public class Foo : MonoBehaviour
 }
 ```
 
-The Event Manager will start running on Awake().
-
 In the Event Manager class, functions are stored as GameEvent delegates. If you don't understand what this means, just take it that the functions are stored as is, meaning they are not executed. 
 
 There are two functions for adding events to the Event Manager:
-
-1. Single-use events: 
+1. Stored events:
+These are events that are stored and can be called repeatedly.
 ```C#
-EventManager.addEvent(GameEvent evt, float delay, bool relative);
+EventManager.registerEvent(GameEvent evt, float delay);
 ```
-There are three parameters in the addEvent function:
+The three parameters in the registerEvent function:
+1. The first parameter is your function.
+2. The second parameter is the amount of time you want the EventManager to wait before executing the function.
+
+There is an optional integer third parameter to indicate the stage you want to store the function in. (See Stage below)
+
+
+. Single-use events: 
+These are events that you want to call once and never be called. These events will never be stored. This also means that if the stage is changed before any event added by addEvent has been executed, those functions will never run. 
+```C#
+EventManager.addEvent(GameEvent evt, float delay);
+```
+There are two parameters in the addEvent function:
 1. The first parameter is your function.
 2. The second parameter is the amount of time you want the Event Manager to wait before executing the function.
-3. The third parameter is to indicate if it will be relative to the current time. Entering false would mean that it will execute relative to the start time of the event manager stage (see Stage below) instead, which I almost never use. 
+
+There is an optional boolean third parameter to indicate if it will be relative to the current time. Entering false would mean that it will execute relative to the start time of the event manager stage (see Stage below) instead, which I almost never use. By default, the third parameter is true.
+
+
+To re-execute all the functions stored, call:
+```C#
+restartStage();
+```
+
+Example use:
+Take for example these two functions:
+```C#
+public void foo() 
+{
+
+}
+
+public int sum(int a, int b) 
+{
+  return a+b;
+}
+```
+
+There are two ways to pass functions as parameters in C#:
+1. 
+```C#
+evtMgr.addEvent(foo, 0);
+evtMgr.registerEvent(foo, 0);
+```
+This method only works for unparameterized functions.
+
+2. 
+```C#
+evtMgr.addEvent(() => foo(), 0);
+evtMgr.addEvent(() => bar(2, 3));
+```
+To pass a parameterized function as-is, you have to add a '() => ' in front to prevent it from evaluating.
+
+> Warning: Events that have the same delay time may not be called in added order. If you want one event to be called right after another, add a very small delay in the second one: 0f vs 0.001f.
+
+####Stages
+To group events together, I came up with the idea of stages, which are basically integer groups for functions. Functions can be stored in different stages, and the default stage is 0.
+
+When a stage is accessed, the timer is reset to 0, so all events in the stage are executed relative to that time. 
+To go to a certain stage, use the function:
+```C#
+goToStage(int i);
+```
+
+To restart a stage, call:
+```C#
+restartStage();
+```
+
+To go to the next stage:
+```C#
+advanceStage();
+```
+
+####Starting the Event Manager
+The Event Manager is started by calling `run()`.
+To ensure that all code runs according to intended means, do these checks:
+1. All registerEvent code is written before run(), so they are all stored before the Event Manager starts.
+2. All addEvent code is writted after run(), so they are all added during Event Manager runtime.
+3. All addEvent code have delays shorter than any code that changes or restarts the stage. 
+
+#####Example code
+```C#
+
+    EventManager evtMgr;
+
+    void Awake()
+    {
+        evtMgr = EventManager.Instance;
+    }
+
+    void Start()
+    {
+        exampleMethod();
+    }
+
+    void foo()
+    {
+        Debug.Log("Hello");
+    }
+
+    void bar(int i)
+    {
+        Debug.Log(i);
+    }
+
+    void exampleMethod()
+    {
+        evtMgr.registerEvent(foo, 0);
+        evtMgr.registerEvent(() => bar(1), 0.1f);
+        evtMgr.registerEvent(() => foo(), 0.2f);
+
+
+        //Stage 1 functions below. The above functions are all in stage 0.
+        evtMgr.registerEvent(() => Debug.Log("Going to stage: "), 0f, 1);
+        evtMgr.registerEvent(() => bar(2), 0.1f, 1);
+        //Go back to stage 0 after 1 second
+        evtMgr.registerEvent(() => evtMgr.goToStage(0), 1, 1);
+
+        //Once you have finished with all the registerEvents, start the Event Manager.
+        evtMgr.run();
+
+        //Add all the temporary events below.
+        
+        //Events do not need to be written in chronological order
+        evtMgr.addEvent(() => Debug.Log("This prints once"), 0.3f);
+        //Goes to next stage after 1 second. As this is executed in the default stage (stage 0),
+        //This will occur after the first three events above. 
+        evtMgr.addEvent(evtMgr.advanceStage, 1);
+        
+        //As the stage is changed before this executes, this function will not be executed.
+        evtMgr.addEvent(() => Debug.Log("This won't print"), 4f);
+    }
+```
+
+The printout are as follows:
+```
+Hello
+1
+Hello
+This prints once
+Going to stage:
+2
+Hello
+1
+Hello
+```
+
+The first 4 lines happen at stage 0, followed by the next 2 at stage 1, and then the last 3 at stage 0 again. 
+
