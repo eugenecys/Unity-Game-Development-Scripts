@@ -48,6 +48,7 @@ One example is IP address - Sometimes there are different computers that the gam
 There are a few sample uses written in the config file already.
 
 To write the config.txt file, there two things to follow:
+
 1. All config values are to be stored in this format: 
 ```Name: Value```
 and in the config script, there should be a case in the switch-case statement:
