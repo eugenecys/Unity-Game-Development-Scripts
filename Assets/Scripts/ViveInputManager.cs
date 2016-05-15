@@ -5,6 +5,8 @@ using System;
 
 public class ViveInputManager : Singleton<ViveInputManager>
 {
+    public bool constantPoll = false;
+
     public SteamVR_TrackedObject leftControllerObject;
     public SteamVR_TrackedObject rightControllerObject;
 
@@ -139,6 +141,13 @@ public class ViveInputManager : Singleton<ViveInputManager>
             leftControllerObject.index = (SteamVR_TrackedObject.EIndex)leftControllerIndex;
             leftControllerObject.isValid = true;
         }
+
+        if (constantPoll)
+        {
+            leftControllerIndex = SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Leftmost);
+            leftControllerObject.index = (SteamVR_TrackedObject.EIndex)leftControllerIndex;
+            leftControllerObject.isValid = true;
+        }
     }
 
     void updateRight()
@@ -191,6 +200,13 @@ public class ViveInputManager : Singleton<ViveInputManager>
             }
         }
         else
+        {
+            rightControllerIndex = SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Rightmost);
+            rightControllerObject.index = (SteamVR_TrackedObject.EIndex)rightControllerIndex;
+            rightControllerObject.isValid = true;
+        }
+
+        if (constantPoll)
         {
             rightControllerIndex = SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Rightmost);
             rightControllerObject.index = (SteamVR_TrackedObject.EIndex)rightControllerIndex;
