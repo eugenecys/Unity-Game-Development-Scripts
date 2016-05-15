@@ -42,10 +42,11 @@ public class Config : Singleton<Config> {
                         string[] data = line.Split(':');
                         if (data.Length == 2)
                         {
-                            switch (data[0].Trim().ToLower())
+							string val = data[1].Trim();
+                            switch (key)
                             {
-                                case "building footprint":
-                                    int val = int.Parse(data[1].Trim());
+                                case "player count":
+                                    int count = int.Parse(val);
                                     //Populate value wherever needed
                                     break;
                                 default:
