@@ -41,6 +41,38 @@ This ensures that the instance stored in myClass is the same instance as all oth
 Note that the singleton derives MonoBehaviour, so there is no need to explicitly derive it anymore.
 
 
+##Input Controller
+Rather than having to have keyboard inputs detected and read in various scripts scattered across Unity, I decided to centralize all of them into a single Input Controller, and have all classes that require keyboard input detected use the input controller to do so. 
+
+The input controller works by constantly polling all possible key presses, and if there is a function mapped to that key, that function is called. 
+
+The input controller is a singleton, and therefore should be used as such.
+
+To map a function to a key, simply call:
+```C# 
+InputController.registerTrigger(InputTrigger trigger, KeyCode key);
+```
+
+The first parameter is a delegate, so all you need to do is pass a function into it. The second parameter is the key you wish to map it to.
+
+Example usage:
+```C#
+public void foo() {
+  //Do stuff
+}
+
+public void bar(int value) {
+  //Do other stuff
+}
+
+void Start() {
+  registerTrigger(foo, KeyCode.W);
+  registerTrigger(() => bar(1), KeyCode.Q);
+}
+```
+
+Everytime W is pressed, foo is called. Everytime Q is pressed, bar is called with an integer value of 1.
+
 ##Event Manager
 I found the Invoke function in Unity rather primitive and limited, e.g. it does not support parameterized functions. At times that I needed to make games that are very heavily event driven, I found Invoke extremely troublesome, and decided to write an Event Manager to replace that.
 
