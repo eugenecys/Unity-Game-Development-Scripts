@@ -43,11 +43,20 @@ public class Config : Singleton<Config> {
                         if (data.Length == 2)
                         {
 							string val = data[1].Trim();
+							string key = data[0].Trim().ToLower();
                             switch (key)
                             {
                                 case "player count":
                                     int count = int.Parse(val);
-                                    //Populate value wherever needed
+                                    //Do stuff
+                                    break;
+                                case "ip address":
+                                    string address = val;
+									//Do stuff
+                                    break;
+                                case "port":
+                                    int port = int.Parse(val);
+                                    //Do stuff
                                     break;
                                 default:
                                     break;
