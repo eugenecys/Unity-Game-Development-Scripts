@@ -40,6 +40,23 @@ This ensures that the instance stored in myClass is the same instance as all oth
 
 Note that the singleton derives MonoBehaviour, so there is no need to explicitly derive it anymore.
 
+##Config 
+In many of the games I made, there were changes I needed to make fairly often, and most of them were simply environmental variables. Rather than having to compile the game every single time I need to change a variable, I created a config file to store the values that I needed to change on the fly. 
+
+One example is IP address - Sometimes there are different computers that the game needed testing on, and there are various server ports that the game has to read from for each machine. Rather than having to compile a different executable for each machine, simply change the ip address accordingly.
+
+There are a few sample uses written in the config file already.
+
+To write the config.txt file, there two things to follow:
+1. All config values are to be stored in this format: 
+```Name: Value```
+and in the config script, there should be a case in the switch-case statement:
+```
+  case "name":
+  //do stuff
+```
+2. Comments can be written in the file using the # key.
+
 
 ##Input Controller
 Rather than having to have keyboard inputs detected and read in various scripts scattered across Unity, I decided to centralize all of them into a single Input Controller, and have all classes that require keyboard input detected use the input controller to do so. 
