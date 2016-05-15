@@ -11,7 +11,9 @@ Typical class in Unity
 ```C#
 public class MyClass : MonoBehaviour 
 {
-
+  public void foo() {
+  
+  }
 }
 ```
 
@@ -19,7 +21,9 @@ Turning the class into a singleton:
 ```C#
 public class MyClass : Singleton<MyClass> 
 {
-
+  public void foo() {
+  
+  }
 }
 ```
 
@@ -33,8 +37,25 @@ public class Foo : MonoBehaviour
   {
     myClass = MyClass.Instance;
   }
+  
+  void bar() {
+    myClass.foo();
+  }
 }
 ```
+
+or simply:
+
+```C#
+public class Foo : MonoBehaviour 
+{
+  void bar() 
+  {
+    MyClass.Instance.foo();
+  }
+}
+```
+
 This ensures that the instance stored in myClass is the same instance as all other instances called by other methods or classes, i.e. one instance, which is basically the singleton design pattern.
 
 
